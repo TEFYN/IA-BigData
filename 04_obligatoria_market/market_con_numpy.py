@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt # Hacer graficos
 import seaborn as sns # Hacer graficos
+from IPython.display import display
 
 
 # leer el dataset
@@ -12,21 +13,25 @@ print("-------------------------------------------------------------------------
 print("----------------------------- Exploración inicial del dataset ---------------------------")
 print("-----------------------------------------------------------------------------------------")
 
-print("\n----------------------------- INFO -----------------------------")
+display(df)
+
+
+print("\n----------------------------- INFO -----------------------------\n")
+
 print(df.info())
 
-print("\n----------------------------- DESCRIBE -----------------------------")
-# print(df.describe(include='all'))
-print(df.describe())
+# print("\n----------------------------- DESCRIBE -----------------------------")
+# # print(df.describe(include='all'))
+# print(df.describe())
 
 print("\n-----------------------------------------------------------------------------------------")
-print("--------------------------------- Renombrado de columnas --------------------------------")
-print("-----------------------------------------------------------------------------------------")
+print("--------------------------------- Nombres de las columnas -------------------------------")
+print("-----------------------------------------------------------------------------------------\n")
 
-# print(df.loc[0])
+print(df.loc[0])
 # print(df.columns)
 columnas = df.columns.tolist()
-print(columnas)
+# print(columnas)
 
 nombres_nuevos = [
     "ID_producto", "peso_producto", "contenido_grasa", "visibilidad", "categoria",
@@ -34,12 +39,19 @@ nombres_nuevos = [
     "tipo_ciudad_tienda", "tipo_tienda", "ventas_producto"
 ]
 
+print("\n-----------------------------------------------------------------------------------------")
+print("---------------------------------- Renombrado columnas ----------------------------------")
+print("-----------------------------------------------------------------------------------------\n")
+
 df.columns = nombres_nuevos
 
-print("\n----------------------------- DESCRIBE -----------------------------")
-print(df.describe(include='all'))
+print(df.loc[0])
 
+# display(df)
 
+# print("\n----------------------------- DESCRIBE -----------------------------")
+# # print(df.describe(include='all'))
+# print(df.shape)
 
 
 print("\n------------------------------------------------------------------------------------------")
@@ -116,42 +128,40 @@ print("\nProducto matricial 2x2:\n------------------------\n", producto)  # prod
 '''
 1. Calcular la mediana del peso de los productos usando NumPy.
 '''
-print("\nMediana del peso de los productos: " , np.median(peso_productos), "-  sin-nan: ", np.nanmedian(peso_productos))
-print("----------------------------------------------------\n")
-# print("-  sin-nan: ", np.isnan(peso_productos).value_counts())
-# print("-  total: ", peso_productos.shape)
-# print("-  nan media: ", np.nanmean(peso_productos).shape)
-# print("-  media ",np.mean(peso_productos).shape)
-
 
 print("----------------------------------------------------\n")
-# print("Mediana del peso de los productos::", np.median(peso_productos))
+print("\nMediana del peso de los productos: " , np.nanmedian(peso_productos))
+print("----------------------------------------------------\n")
 
 '''
 2. ¿Cuál es el valor más frecuente (moda) de `Item_Weight`? --> peso_productos
 '''
-# print("El valor mas frecuente o Moda es: ", np.unique(peso_productos, return_counts=True))
 
-print("\nEl valor mas frecuente o Moda es: " , np.unique(peso_productos, return_counts=True) )
+print("\nEl valor mas frecuente o Moda de peso_productos es " , df["peso_producto"].mode()[0])
 print("----------------------------------------------------\n")
-
-
 
 '''
 3. Filtrar los productos que tengan un precio mayor a $250 y visibilidad menor al 0.02.
 '''
 
-
 productos_mayor_precio = precios[precios > 250]
 productos_menor_visibilidad = visibilidad[visibilidad < 0.02]
 
-print("\nProductos con un precio mayor a $250:\n" )
+print("\nCantidad Productos con un precio mayor a $250: ", productos_mayor_precio.shape[0]  )
 print("-------------------------------------------------\n")
-print(productos_mayor_precio,"\n", productos_mayor_precio.shape,"\n", productos_mayor_precio.dtype)
+print(productos_mayor_precio[:10],"\n", productos_mayor_precio.shape,"\n", productos_mayor_precio.dtype)
 
-print("\nProductos con visibilidad menor al 0.02:\n" )
+print("\nCantidad de Productos con visibilidad menor al 0.02: ", productos_menor_visibilidad.shape[0]  )
 print("-------------------------------------------------\n")
-print(productos_menor_visibilidad,"\n", productos_menor_visibilidad.shape,"\n", productos_menor_visibilidad.dtype)
+print(productos_menor_visibilidad[:10],"\n", productos_menor_visibilidad.shape,"\n", productos_menor_visibilidad.dtype)
+
+
+productos_filtrados =  precios[(precios > 250)&(visibilidad < 0.02)]
+print("\nCantidad de Productos con precio mayor a $250 & visibilidad menor al 0.02: ", productos_filtrados.shape[0] )
+print("-------------------------------------------------------------------\n")
+
+
+print(productos_filtrados,"\n", productos_filtrados.shape,"\n", productos_filtrados.dtype)
 
 
 '''
@@ -170,13 +180,11 @@ print(ventas[0:4], "\n", ventas[0:].shape,"\n", ventas[0:].dtype)
 
 diferencia_precio_ventas = precios[0:500] - ventas[0:500]
 
-'''si voy a sumar 2 listas, las listas deben tener la  misma cantidad de elementos'''
-
 print("\nDiferencia entre precio y ventas para los primeros 500 productos:" )
 print("-----------------------------------------------------------------\n")
-print(diferencia_precio_ventas,"\n", diferencia_precio_ventas.shape,"\n", diferencia_precio_ventas.dtype)
 
-
+display(diferencia_precio_ventas)
+print("\nCantidad de elementos sumandos: ", diferencia_precio_ventas.shape[0],"\n", diferencia_precio_ventas.dtype)
 
 '''
 5. Normalizar los valores de visibilidad entre 0 y 1.
@@ -187,15 +195,23 @@ print(diferencia_precio_ventas,"\n", diferencia_precio_ventas.shape,"\n", difere
 '''
 6. Crear una matriz de 3 columnas: peso, precio y ventas, y calcular su media por columna.
 '''
+peso_productos = df["peso_producto"]
+precios = df["precio_maximo"]
+ventas = df["ventas_producto"]
 
-matriz = np.column_stack((peso_productos, precios, ventas))
-# matriz = np.column_stack((['peso_productos'], ['precios'], ['ventas']))
-print("\nMatriz de 3 columnas: peso_productos, precios, ventas\n------------------------------------------------------\n", matriz[:])
+matriz = np.column_stack((peso_productos.round(1), precios.round(1), ventas.round(1))) 
+print("\nMatriz de 3 columnas: peso_productos, precios, ventas\n------------------------------------------------------\n")
+
+display(matriz)
+print("\n",matriz.shape, matriz.dtype)
 
 
-print("\nMedia por columnas: peso_productos, precios, ventas\n------------------------------------------------------\n")
-print("Media Peso Productos: ", (np.nanmean(matriz, axis=0)))    
+print("\nMedia por columnas:" )
+print("------------------------------------------------------\n")
 
+print("Media de Pesos Productos: ", np.nanmean(peso_productos).round(2))
+print("Media de Precioss: ", np.nanmean(precios).round(2))
+print("Media de Ventas: ", np.nanmean(ventas).round(2))
 
 
 '''

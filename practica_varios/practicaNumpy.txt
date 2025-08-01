@@ -20,41 +20,46 @@ NumPy
 
         ● Otros generadores:
 
-            o np.zeros((2,3))
-            o np.ones((3,3))
-            o np.full((2,2), 7)
-            o np.eye(3)
-            o np.arange(0,10,2)
-            o np.linspace(0,1,5)
-            o np.random.random((3,3))
+            o np.zeros((2,3))  -->  Matriz de ceros (2 filas, 3 columnas)
+            o np.ones((3,3)) -->  Matriz de unos (3x3)
+            o np.full((2,2), 7) -->  Matriz de 2x2 llena con el número 7
+            o np.eye(3) -->  Matriz identidad 3x3
+            o np.arange(0,10,2) #-->  Números desde 0 hasta 8 (salto de 2): [0 2 4 6 8]
+            o np.linspace(0,1,5) #-->  5 valores entre 0 y 1 (inclusivo): [0.   0.25 0.5  0.75 1.  ]
+            o np.random.random((3,3)) -->  Matriz 3x3 con números aleatorios entre 0 y 1
 
 
 ✍️ 3. Atributos de un array
 
-        ● a = np.arange(12).reshape(3,4)
+        ● a = np.arange(12).reshape(3,4)   -->   array con números del 0 al 11, en forma de matriz 3x4
 
-        ● a.ndim # 2
+        ● a.ndim   -->  número de dimensiones → 2
 
-        ● a.shape # (3,4)
+        ● a.shape  -->  forma (filas, columnas) → (3, 4)
 
-        ● a.size # 12
+        ● a.size  -->  cantidad total de elementos → 12
 
-        ● a.dtype # dtype, ej. int64
+        ● a.dtype   -->  tipo de datos 
+                dtype, ej. int64
 
-        ● a.itemsize# bytes por elemento
+        ● a.itemsize  -->  cantidad de bytes que ocupa cada elemento
 
 
 🪓 4. Acceso y Slicing
 
         ● Índices múltiples:
 
-                o a[1,2]
-                o a[1][2]
+                o a[1,2] --> fila 1, columna 2 → 6
+                o a[1][2] --> mismo resultado → 6
 
 
         ● Subarrays:
 
-               o a[:, :2] # todas filas, columnas 0 y 1        
+               o a[:, :2] # todas filas, solo columnas 0 y 1    
+
+                        [[0 1]
+                         [4 5]
+                         [8 9]]    
 
 
 📥 5. Filtrado por condición
@@ -69,6 +74,7 @@ NumPy
 
 
 🔢 6. Operaciones vectorizadas
+
         ● a = np.array([1,2,3,6])
 
         ● b = np.linspace(0,2,4)
@@ -112,4 +118,18 @@ NumPy
         Sección Funciones Principales
 
 
+
+
+        total = np.sum(df)
+
+        primero: pasar las columnas a las que le aplico numpy a un array 
+
+                ventas = df["ventas_producto"].to_numpy()
+                precios = df["precio_maximo"].to_numpy()
+
+        np.nanmean(precios) --> media de todos los precios
+        np.max(venntas) --> precio maximo
+        np.min(ventas) --> precio mas bajo
+
+        df['precio'].mode()[0] ----> esta funcion mode ignora los nulos
 '''
